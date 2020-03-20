@@ -1,0 +1,185 @@
+DECLARE
+	--global variable 
+	cus_id number:=1000;
+	--if we dont want this num to be overridden then use
+	cus_num CONSTANT number DEFAULT 2000;
+	cus_name VARCHAR2(20):='deep';
+BEGIN
+    /*
+    --(this is overriding)
+    this is multiline comment
+    */
+    cus_id :=3000;
+    --cus_num :=4000;   --we can not override this
+    DBMS_OUTPUT.PUT_LINE('welcome to the course');
+    DBMS_OUTPUT.PUT_LINE('customer id :' || cus_id);
+    DBMS_OUTPUT.PUT_LINE('customer number :' || cus_num);
+    DBMS_OUTPUT.PUT_LINE('customer name :' || cus_name);
+    
+    DECLARE
+    	--local variable
+    	seller_id number DEFAULT 10;
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('customer id :' || cus_id);
+        DBMS_OUTPUT.PUT_LINE('seller id :' || seller_id);
+    END;
+END;
+
+*******************************************************************
+
+--if else
+
+DECLARE
+total_amt number :=40;
+discount NUMBER :=0;
+BEGIN
+    if total_amt >50
+    then
+    discount := total_amt*0.1;
+    else
+    discount := total_amt*0.05;
+    end if;
+    DBMS_OUTPUT.PUT_LINE('discount:' || discount);
+end;
+
+
+*******************************************************************
+
+--case
+
+DECLARE
+total_amt number :=70;
+discount NUMBER :=0;
+BEGIN
+    CASE
+    WHEN total_amt >50
+    then
+    discount := total_amt*0.1;
+    else
+    discount := total_amt*0.05;
+    end CASE;
+    DBMS_OUTPUT.PUT_LINE('discount:' || discount);
+end;
+
+
+*******************************************************************
+
+--while loop
+
+DECLARE
+counter NUMBER DEFAULT 10;
+BEGIN
+    WHILE counter <20
+    LOOP
+        dbms_output.put_line('number : ' || counter);
+        counter := counter +1;
+    END LOOP;
+END;
+
+
+*******************************************************************
+
+--for loop
+
+DECLARE
+counter NUMBER DEFAULT 10;
+BEGIN
+    FOR counter IN 10..20
+    LOOP
+        dbms_output.put_line('counter value : ' || counter);
+    END LOOP;
+END;
+
+
+
+DECLARE
+counter NUMBER DEFAULT 10;
+BEGIN
+    FOR counter IN REVERSE 10..20         --FOR PRINTING IN REVERSE ORDER
+    LOOP
+        dbms_output.put_line('counter value : ' || counter);
+    END LOOP;
+END;
+
+
+
+
+exercise solution
+---------------------
+question1 
+
+
+DECLARE
+ A NUMBER := 10;
+ B VARCHAR2 (100) := 'Training course';
+ C DATE := TO_DATE ('01-jan-2020', 'dd-mon-yyyy');
+ D DATE := TO_DATE('13-MAR-2020', 'DD-MON-RR');
+BEGIN
+ DBMS_OUTPUT.PUT_LINE (A);
+ DBMS_OUTPUT.PUT_LINE (B);
+ DBMS_OUTPUT.PUT_LINE (D);
+END;
+
+
+****************************************************************
+
+
+--reading from the database
+
+select * from customer
+
+
+DECLARE
+    c_id number :=10;
+    c_name varchar2(20);
+    c_add varchar2(50);
+BEGIN
+    SELECT FIRST_NAME,ADDRESS_LINE1 INTO c_name,c_add
+    from customer
+    where CUSTOMER_ID=c_id;
+    
+    dbms_output.put_line(c_name);
+    DBMS_OUTPUT.PUT_LINE (c_add);
+END;
+
+--using %type
+
+DECLARE
+    c_id customer.CUSTOMER_ID%TYPE :=10;
+    c_name customer.FIRST_NAME%TYPE;
+    c_cun CUSTOMER.COUNTRY%TYPE;
+BEGIN
+    SELECT FIRST_NAME,COUNTRY INTO c_name,c_cun
+    from customer
+    where CUSTOMER_ID=c_id;
+    
+    dbms_output.put_line(c_name);
+    DBMS_OUTPUT.PUT_LINE (c_cun);
+END;
+
+
+****************************************************************
+
+
+--inserting into database
+declare
+    c_id customer.customer_id%type :=13;
+    c_fname customer.first_name%type := 'deep';
+    c_lname customer.last_name%type :='sinha';
+    c_mname customer.middle_name%type:='ranjan';
+    c_add1 customer.address_line1%type:='202 njoy';
+    c_add2 customer.address_line2%type:='sarjapur';
+    c_city customer.city%type:='bangalore';
+    c_country customer.country%type:='india';
+    c_dadd customer.date_added%type:=SYSDATE;
+    c_region customer.region%type:='south';
+begin
+    INSERT INTO customer(customer_id,first_name,last_name,middle_name,address_line1,address_line2,city,country,date_added,region)
+    
+    VALUES (c_id,c_fname,c_lname,c_mname,c_add1,c_add2,c_city,c_country,c_dadd,c_region);
+    
+    commit;
+    
+    DBMS_OUTPUT.PUT_LINE('inserted sucessfully');
+end;
+

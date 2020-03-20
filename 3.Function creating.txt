@@ -1,0 +1,31 @@
+select * from sales
+--function
+
+create or replace function sales_count
+(
+p_sales_date in Date
+)return number
+as
+no_of_sales number :=0;
+begin
+    select count(*) into no_of_sales from sales
+    where SALES_DATE = p_sales_date;
+    
+    return no_of_sales;
+end sales_count;
+
+--calling a function
+--method 1 sql statement
+
+select sales_count(to_date('09-feb-2015','dd-mon-yyyy')) from dual
+
+
+--method 2
+
+declare
+scount number :=0;
+begin
+scount :=sales_count(to_date('09-feb-2015','dd-mon-yyyy'));
+DBMS_OUTPUT.PUT_LINE(scount);
+end;
+

@@ -1,0 +1,113 @@
+--PROCEDURE WITH IN MODE
+
+create or replace procedure ADD_CUSTOMER
+(
+c_id            in number,
+c_fname         in varchar2,
+c_lname         in varchar2,
+c_mname         in varchar2,
+c_add1          in varchar2,
+c_add2          in varchar2,
+c_city          in varchar2,
+c_country       in varchar2,
+c_date_added    in DATE,
+c_region        in varchar2
+)
+AS
+BEGIN
+    INSERT INTO customer(customer_id,first_name,last_name,middle_name,address_line1,address_line2,city,country,date_added,region)
+    VALUES (c_id,c_fname,c_lname,c_mname,c_add1,c_add2,c_city,c_country,c_date_added,c_region);
+    commit;
+    DBMS_OUTPUT.PUT_LINE('inserted sucessfully');
+END ADD_CUSTOMER;
+
+
+--calling a procedure
+--method 1
+
+begin
+    ADD_CUSTOMER(17,'JEFF','ALFANSO','L','23 MANHATTAN RD',NULL,'MANHATTAN','USA',SYSDATE,'SOUTH');
+end;
+select * from customer
+
+***************************************************************************
+--procedure with out MODE
+
+create or replace procedure ADD_CUSTOMER2
+(
+c_id            in number,
+c_fname         in varchar2,
+c_lname         in varchar2,
+c_mname         in varchar2,
+c_add1          in varchar2,
+c_add2          in varchar2,
+c_city          in varchar2,
+c_country       in varchar2,
+c_date_added    in DATE,
+c_region        in varchar2,
+c_total_count   out number
+)
+AS
+BEGIN
+    INSERT INTO customer(customer_id,first_name,last_name,middle_name,address_line1,address_line2,city,country,date_added,region)
+    VALUES (c_id,c_fname,c_lname,c_mname,c_add1,c_add2,c_city,c_country,c_date_added,c_region);
+    commit;
+    DBMS_OUTPUT.PUT_LINE('inserted sucessfully');
+    select count(1) into c_total_count from customer;
+END ADD_CUSTOMER2;
+
+
+
+--calling a procedure
+--method 2
+declare
+    total_count number;
+begin
+    ADD_CUSTOMER2(14,'JEFF','ALFANSO','L','23 MANHATTAN RD',NULL,'MANHATTAN','USA',SYSDATE,'SOUTH',total_count);
+    DBMS_OUTPUT.PUT_LINE('Total count '|| total_count);
+end;
+select * from customer
+
+
+delete from CUSTOMER where CUSTOMER_ID=14;
+
+
+*******************************************************************
+
+--MODE IN OUT
+-- here c_id for input and output both
+create or replace procedure ADD_CUSTOMER3
+(
+c_id            in OUT number,
+c_fname         in varchar2,
+c_lname         in varchar2,
+c_mname         in varchar2,
+c_add1          in varchar2,
+c_add2          in varchar2,
+c_city          in varchar2,
+c_country       in varchar2,
+c_date_added    in DATE,
+c_region        in varchar2
+)
+AS
+BEGIN
+    INSERT INTO customer(customer_id,first_name,last_name,middle_name,address_line1,address_line2,city,country,date_added,region)
+    VALUES (c_id,c_fname,c_lname,c_mname,c_add1,c_add2,c_city,c_country,c_date_added,c_region);
+    commit;
+    DBMS_OUTPUT.PUT_LINE('inserted sucessfully');
+    select count(1) into c_id from customer;
+END ADD_CUSTOMER3;
+
+
+
+--calling a procedure
+--method 2
+declare
+    total_count number:=20;
+begin
+    ADD_CUSTOMER3(total_count,'JEFF','ALFANSO','L','23 MANHATTAN RD',NULL,'MANHATTAN','USA',SYSDATE,'SOUTH');
+    DBMS_OUTPUT.PUT_LINE('Total count '|| total_count);
+end;
+
+
+select * from customer

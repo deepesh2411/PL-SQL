@@ -1,0 +1,45 @@
+--exception handling
+
+
+									--CREATING PROCEDURE WITH NAME get_customer
+create or replace procedure get_customer
+(
+c_id in number
+)
+									--DECLAREING VARIABLES
+as
+c_fname customer.first_name%type;
+c_city customer.city%type;
+user_exception exception;    --declare
+
+begin
+									--IF ELSE BLOCK
+    if c_id <= 0 then
+    raise user_exception;
+    end if;
+									--SQL QUERRY
+    select first_name,c_city into c_fname, c_city from customer
+    where customer_id=c_id;
+
+    DBMS_OUTPUT.PUT_LINE(c_fname);
+    DBMS_OUTPUT.PUT_LINE(c_city);
+
+exception
+    									--USER CREATED EXCEPTION
+    when user_exception then
+        DBMS_OUTPUT.PUT_LINE('customer id must be positive no grater than zero');
+    when NO_DATA_FOUND then
+        DBMS_OUTPUT.PUT_LINE('No data found');
+    when TOO_MANY_ROWS then
+        DBMS_OUTPUT.PUT_LINE('More than one rows');
+    when others then
+        DBMS_OUTPUT.PUT_LINE('error');
+    
+end get_customer;							--END PROCEDURE
+
+
+execute get_customer(0);        					--FEED VALUE ID TO GET THE DATA
+
+--c_fname,c_lname,c_mname,c_add1,c_add2,c_city,c_country,c_date_added,c_region
+
+
